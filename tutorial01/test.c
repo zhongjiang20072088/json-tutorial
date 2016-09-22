@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "leptjson.h"
+#include "./leptjson.h"
 
 static int main_ret = 0;
 static int test_count = 0;
@@ -20,11 +20,26 @@ static int test_pass = 0;
 
 #define EXPECT_EQ_INT(expect, actual) EXPECT_EQ_BASE((expect) == (actual), expect, actual, "%d")
 
+
 static void test_parse_null() {
     lept_value v;
     v.type = LEPT_FALSE;
     EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, "null"));
     EXPECT_EQ_INT(LEPT_NULL, lept_get_type(&v));
+}
+
+static void test_parse_true() {
+    lept_value v;
+    v.type = LEPT_NULL;
+    EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, "true"));
+    EXPECT_EQ_INT(LEPT_TRUE, lept_get_type(&v)); 
+}
+
+static void test_parse_false() {
+   lept_value v;
+   v.type = LEPT_NULL;
+   EXPECT_EQ_INT(LEPT_PARSE_OK, lept_parse(&v, "false"));
+   EXPECT_EQ_INT(LEPT_FALSE, lept_get_type(&v));
 }
 
 static void test_parse_expect_value() {
@@ -59,6 +74,8 @@ static void test_parse_root_not_singular() {
 
 static void test_parse() {
     test_parse_null();
+    test_parse_true();
+    test_parse_false();
     test_parse_expect_value();
     test_parse_invalid_value();
     test_parse_root_not_singular();
